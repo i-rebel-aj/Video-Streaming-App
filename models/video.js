@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
 const videoSchema = mongoose.Schema({
     author: {
         id:{
@@ -27,7 +26,12 @@ const videoSchema = mongoose.Schema({
         {
             Username: String
         }
-    ],  
+    ],
+    UnlikedUsers:[
+        {
+            Username: String
+        }
+    ],
     LikesQuantity:{
         type: Number,
         default: 0

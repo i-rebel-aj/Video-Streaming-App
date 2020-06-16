@@ -15,11 +15,6 @@ var UserSchema=new mongoose.Schema({
     },
     Username:{
         type: String,
-        required: true,
-        unique: true
-    },
-    Role:{
-        type: String,
         required: true
     },
     Videos:[

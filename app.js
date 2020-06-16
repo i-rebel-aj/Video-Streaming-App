@@ -12,7 +12,8 @@ var flash=require("connect-flash");
 
 //Requiring Routes
 var indexRoutes=require("./routes/index");
-
+var adminRoutes=require("./routes/admin");
+var moderatorRoutes=require("./routes/moderator");
 
 //Connecting To Database
 mongoose.connect("mongodb://localhost/BlackLivesMatter");
@@ -50,8 +51,8 @@ app.use(function(req,res,next){
 
 //Using Routes
 app.use("/", indexRoutes);
-
-
+app.use("/admin", adminRoutes);
+app.use("/moderator", moderatorRoutes);
 
 
 

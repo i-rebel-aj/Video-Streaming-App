@@ -109,7 +109,15 @@
                     <%=video.VideoLocation%></h7>
                   <p style="">From <%=video.author.Username%></p>
                   <p class="card-text"><%=video.VideoDescription%></p>
-                  <a href="#" class="btn btn-success btn-sm">Like</a>
+                  <!--Find that wether existing user has lived video or not-->
+                  <!--If Not liked-->
+                  <form id="LikeButtonForm" action="/video/<%=video._id%>/like" method="POST" style="display: inline;">
+                        <button class="btn btn-outline-success btn-sm" id="LikeButton">Like</button>
+                  </form>
+                  <!--Else Unlike-->
+                  <form id="unlikeButtonForm" action="/video/<%=video._id%>/unlike" method="POST" style="display: inline;">
+                        <button class="btn btn-outline-warning btn-sm" id="UnlikeButton">Unlike</button>
+                  </form>
                   <%if(currentUser!==null){%>
                     <%if(currentUser.Username===video.author.Username){%>
                         <form action="/video/<%=video._id%>?_method=DELETE" method="POST" style="display: inline;">
@@ -132,5 +140,8 @@
     <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    </body>
+    <script>
+
+    </script>    
+</body>
 </html>
