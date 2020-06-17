@@ -17,7 +17,7 @@ router.get("/", (req, res) => {
                         if(err){
                             console.log(err);
                         }else{
-                            res.render("Admin/AdminPanel", {Users: foundUsers, Videos: foundUsers, Moderators: foundModerators});
+                            res.render("Admin/AdminPanel", {Users: foundUsers, Videos: foundVideos, Moderators: foundModerators});
                         }
                     });
                 }

@@ -227,30 +227,33 @@ a.article:hover {
                             </tr>
                         </thead>
                         <tbody>
-                            <%Videos.forEach(function(video){%>
+                            <%Videos.forEach(function(video){ console.log(video)%>
                                 <%if(video.ReportStatus===false){%>
                                 <tr>
                                     <td><%=video._id%></td>
                                     <td><%=video.VideoTitle%></td>
-                                    <td><%=video.ModerationStatus%></td>
+                                    <%if(video.ModerationStatus===false){%>
+                                        <td><a href="/moderate/<%=video._id%>" class="btn btn-outline-success btn-sm">Moderate</a></td>
+                                    <%}else{%>
+                                        <td>Moderated</td>
+                                    <%}%>
                                     <td><%=video.author.Username%></td>
                                     <td><%=video.createdAt%></td>
-                                    <td><a href="#" class="btn btn-outline-primary btn-sm">View</a></td>
-                                    <td><a href="#" class="btn btn-outline-danger btn-sm">Delete</a></td>
+                                    <td><a href="/video/<%=video._id%>" class="btn btn-outline-primary btn-sm">View</a></td>
+                                    <td><form action="/video/<%=video._id%>?_method=DELETE" method="POST"><button class="btn btn-outline-danger btn-sm">Delete</button></form></td>
                                 </tr>
-                                <%}>
+                                <%}%>
                             <%});%>
                         </tbody>
                     </table>
                 </div>
                 <div id="ReportList" style="display: none;">
-                    <h4>Following Videos were fount inappropriate to others</h4>
+                    <h4>Following Videos were found inappropriate to others</h4>
                     <table class="table">
                         <thead class="thead-dark">
                             <tr>
                                 <th>ID</th>
                                 <th>Video Title</th>
-                                <th>Moderation Status</th>
                                 <th>Author</th>
                                 <th>Uploaded At</th>
                                 <th>View Video</th>
@@ -263,13 +266,12 @@ a.article:hover {
                                 <tr>
                                     <td><%=video._id%></td>
                                     <td><%=video.VideoTitle%></td>
-                                    <td><%=video.ModerationStatus%></td>
                                     <td><%=video.author.Username%></td>
                                     <td><%=video.createdAt%></td>
                                     <td><a href="#" class="btn btn-outline-primary btn-sm">View</a></td>
                                     <td><a href="#" class="btn btn-outline-danger btn-sm">Delete</a></td>
                                 </tr>
-                                <%}>
+                                <%}%>
                             <%});%>
                         </tbody>
                     </table>
