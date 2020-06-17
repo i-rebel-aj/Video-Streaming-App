@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+//Try Some Form of Databse Optimisations
 const videoSchema = mongoose.Schema({
     author: {
         id:{
@@ -38,7 +39,13 @@ const videoSchema = mongoose.Schema({
     },
     VideoDuration :{
         type: String
-    }
+    },
+    ModerationStatus :{
+        type: Boolean
+    },
+    ReportStatus:{
+        type: Boolean
+    },
 }, { timestamps: true })
 
 module.exports = mongoose.model('Video', videoSchema);

@@ -116,10 +116,14 @@
                             <button class="btn btn-danger btn-sm">Delete</b>
                         </form>
                     <%}else{%>
-                        <a href="#" class="btn btn-outline-danger btn-sm ">Report</a>
+                        <from action="/report/<%=video._id%>" method="POST">
+                            <button class="btn btn-outline-danger btn-sm">Report</b>
+                        </from>
                     <%}%>
                     <%}else{%>
-                        <a href="#" class="btn btn-outline-danger btn-sm ">Report</a>
+                        <from action="/report/<%=video._id%>" method="POST">
+                            <button class="btn btn-outline-danger btn-sm">Report</b>
+                        </from>
                     <%}%>
                 </div>
               </div>

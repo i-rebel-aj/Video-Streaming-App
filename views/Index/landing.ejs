@@ -107,7 +107,7 @@
                   <h5 class="card-title"><%=video.VideoTitle%></h5>
                   <h7><i class="fa fa-map-marker" aria-hidden="true"></i>
                     <%=video.VideoLocation%></h7>
-                  <p style="">From <%=video.author.Username%></p>
+                  <p>From <%=video.author.Username%></p>
                   <p class="card-text"><%=video.VideoDescription%></p>
                   <!--Find that wether existing user has lived video or not-->
                   <!--If Not liked-->
@@ -124,10 +124,14 @@
                             <button class="btn btn-danger btn-sm">Delete</b>
                         </form>
                     <%}else{%>
-                        <a href="#" class="btn btn-outline-danger btn-sm ">Report</a>
+                        <form action="/report/<%=video._id%>" method="POST" style="display: inline;">
+                            <button class="btn btn-outline-danger btn-sm">Report</b>
+                        </form >
                     <%}%>
                     <%}else{%>
-                        <a href="#" class="btn btn-outline-danger btn-sm ">Report</a>
+                        <form action="/report/<%=video._id%>" method="POST" style="display: inline;">
+                            <button class="btn btn-outline-danger btn-sm">Report</b>
+                        </form>
                     <%}%>
                 </div>
               </div>

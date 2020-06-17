@@ -63,7 +63,6 @@ router.get("/logout", middleware.isLoggedIn, function (req, res) {
 router.post("/signup", function (req, res) {
     let hash = bcrypt.hashSync(req.body.password, 14);
     req.body.password = hash;
-    req.body.Role="Client";
     let registered_user = new User(req.body);
     console.log(registered_user);
     registered_user.save(function (err, doc) {
@@ -173,6 +172,8 @@ router.post("/uploadVideo", middleware.isLoggedIn, (req, res) => {
                     var videoDetails = req.body;
                     videoDetails.VideoFilePath = req.file.path;
                     videoDetails.author = author;
+                    videoDetails.ModerationStatus=false;
+                    videoDetails.ReportStatus=false;
                     Videos.create(videoDetails, (err, newlyCreated) => {
                         if (err) {
                             console.log(err);
@@ -185,6 +186,23 @@ router.post("/uploadVideo", middleware.isLoggedIn, (req, res) => {
                     });
                 }
             });
+        }
+    });
+});
+
+// @POST To Add Video to be reported
+router.post("/report/:id",middleware.isLoggedIn, (req,res)=>{
+    Videos.findById(req.params.id, (err, foundVideo)=>{
+        if(err){
+            console.log(err);
+        }else{
+            //Mutating Directly a bad programming practice
+            foundVideo.ReportStatus=true;
+            //console.log("After Report Status");
+            //console.log(foundVideo);
+            foundVideo.save();
+            req.flash("success", "Video has been reported and will be viewd by moderator or admin");
+            res.redirect("/");
         }
     });
 });

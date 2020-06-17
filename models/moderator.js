@@ -1,5 +1,5 @@
 var mongoose=require("mongoose");
-var UserSchema=new mongoose.Schema({
+var ModeratorSchema=new mongoose.Schema({
     Name: {
         type:String,
         required: true
@@ -15,13 +15,14 @@ var UserSchema=new mongoose.Schema({
     },
     Username:{
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
-    Videos:[
+    VideosModerated:[
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Video"
         }
     ]
 },{ timestamps: true });
-module.exports=mongoose.model("User", UserSchema);
+module.exports=mongoose.model("Moderator", ModeratorSchema);
