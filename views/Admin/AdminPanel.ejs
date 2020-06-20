@@ -213,7 +213,7 @@ a.article:hover {
                     </table>
                 </div>
                 <div id="VideoList" style="display: none;">
-                    <h4>Viewing All Videos</h4>
+                    <h4>Viewing All Non-Reported Videos</h4>
                     <table class="table">
                         <thead class="thead-dark">
                             <tr>
@@ -233,7 +233,7 @@ a.article:hover {
                                     <td><%=video._id%></td>
                                     <td><%=video.VideoTitle%></td>
                                     <%if(video.ModerationStatus===false){%>
-                                        <td><a href="/moderate/<%=video._id%>" class="btn btn-outline-success btn-sm">Moderate</a></td>
+                                        <td><a href="/view/<%=video._id%>" class="btn btn-outline-success btn-sm">Moderate</a></td>
                                     <%}else{%>
                                         <td>Moderated</td>
                                     <%}%>
@@ -268,8 +268,8 @@ a.article:hover {
                                     <td><%=video.VideoTitle%></td>
                                     <td><%=video.author.Username%></td>
                                     <td><%=video.createdAt%></td>
-                                    <td><a href="#" class="btn btn-outline-primary btn-sm">View</a></td>
-                                    <td><a href="#" class="btn btn-outline-danger btn-sm">Delete</a></td>
+                                    <td><a href="/video/<%=video._id%>" class="btn btn-outline-primary btn-sm">View</a></td>
+                                    <td><form action="/video/<%=video._id%>?_method=DELETE" method="POST"><button class="btn btn-outline-danger btn-sm">Delete</button></form></td>
                                 </tr>
                                 <%}%>
                             <%});%>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BlackLivesMatter</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!--Add a style.css-->
+</head>
+<body>
+<div class="container">
+    <h3>View video Here</h3>
+    <video height="240" controls>
+        <source src="/<%=video.VideoFilePath%>" type="video/mp4">
+    </video>
+    <br>
+    <a href="#" class="btn btn-outline-success">Video Approoved</a>
+    <a href="#" class="btn btn-outline-danger">Reject and Delete</a>
+</div>
+<%-include("../partials/footer")%>

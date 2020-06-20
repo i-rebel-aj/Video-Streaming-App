@@ -15,6 +15,7 @@ dotenv.config();
 const indexRoutes=require("./routes/index");
 const adminRoutes=require("./routes/admin");
 const moderatorRoutes=require("./routes/moderator");
+const videoRoutes=require("./routes/video");
 
 //Connecting To Database
 mongoose.connect("mongodb://localhost/BlackLivesMatter");
@@ -54,7 +55,7 @@ app.use(function(req,res,next){
 app.use("/", indexRoutes);
 app.use("/admin", adminRoutes);
 app.use("/moderator", moderatorRoutes);
-
+app.use("/video", videoRoutes);
 
 
 app.get("*", (req,res)=>{
