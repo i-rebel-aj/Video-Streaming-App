@@ -1,19 +1,20 @@
 //Importing Dependencies
 
-var express = require("express");
-var app = express();
-var bodyParser = require("body-parser");
-var mongoose = require("mongoose");
-var methodOverride = require("method-override");
-var cookieParser = require('cookie-parser');
-var session = require('express-session');
-var flash=require("connect-flash");
-
+const express = require("express");
+const app = express();
+const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
+const methodOverride = require("method-override");
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const flash=require("connect-flash");
+const dotenv = require('dotenv');
+dotenv.config();
 
 //Requiring Routes
-var indexRoutes=require("./routes/index");
-var adminRoutes=require("./routes/admin");
-var moderatorRoutes=require("./routes/moderator");
+const indexRoutes=require("./routes/index");
+const adminRoutes=require("./routes/admin");
+const moderatorRoutes=require("./routes/moderator");
 
 //Connecting To Database
 mongoose.connect("mongodb://localhost/BlackLivesMatter");
@@ -59,6 +60,6 @@ app.use("/moderator", moderatorRoutes);
 app.get("*", (req,res)=>{
     res.send("Some Error page will go here");
 });
-app.listen(5000, function(){
-    console.log("The Server has started");
+app.listen(process.env.PORT, ()=>{
+    console.log(`The Server has started on port ${process.env.PORT}`);
 });
