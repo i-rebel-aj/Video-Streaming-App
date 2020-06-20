@@ -184,6 +184,16 @@ a.article:hover {
                 </div>
             </nav>
             <div class="container">
+                <% if(error &&error.length>0){%>
+                    <div class="alert alert-danger" role="alert">
+                        <%=error%>
+                      </div>
+                    <%}%>
+                  <% if(success &&success.length>0){%>
+                    <div class="alert alert-success" role="alert">
+                        <%=success%>
+                      </div>
+                    <%}%> 
                 <div id="UserList">
                     <h4>Viewing Users</h4> 
                     <table class="table">
@@ -233,13 +243,13 @@ a.article:hover {
                                     <td><%=video._id%></td>
                                     <td><%=video.VideoTitle%></td>
                                     <%if(video.ModerationStatus===false){%>
-                                        <td><a href="/view/<%=video._id%>" class="btn btn-outline-success btn-sm">Moderate</a></td>
+                                        <td><a href="/video/view/<%=video._id%>" class="btn btn-outline-success btn-sm">Moderate</a></td>
                                     <%}else{%>
                                         <td>Moderated</td>
                                     <%}%>
                                     <td><%=video.author.Username%></td>
                                     <td><%=video.createdAt%></td>
-                                    <td><a href="/video/<%=video._id%>" class="btn btn-outline-primary btn-sm">View</a></td>
+                                    <td><a href="/video/view/<%=video._id%>" class="btn btn-outline-primary btn-sm">View</a></td>
                                     <td><form action="/video/<%=video._id%>?_method=DELETE" method="POST"><button class="btn btn-outline-danger btn-sm">Delete</button></form></td>
                                 </tr>
                                 <%}%>

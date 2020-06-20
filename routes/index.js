@@ -232,8 +232,13 @@ router.delete("/video/:id", upload, async (req, res) => {
             });
             await unlinkAsync(foundVideo.VideoFilePath);
             foundVideo.remove();
+            backURL=req.header('Referer') || '/';
             req.flash("error", "Video Deleted Successfully");
-            res.redirect("back");
+            if(backURL.includes("/video")){
+                res.redirect("/admin/dashboard");
+            }else{
+                res.redirect("back");
+            }
         }
     });
 });
