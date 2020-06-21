@@ -97,6 +97,20 @@ router.post("/login", function (req, res) {
     });
 });
 
+/*==============================================
+    Support Handling
+================================================*/
+router.get("/support", (req,res)=>{
+    res.send("Support Page Will Go Here");
+});
+router.get("/contact", (req,res)=>{
+    res.render("Index/contact");
+});
+
+
+
+
+
 /*===============================================
     Video Handling
 =================================================*/
