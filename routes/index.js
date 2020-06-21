@@ -107,6 +107,10 @@ router.get("/", (req, res) => {
         if (err) {
             console.log(err);
         } else {
+            allVideos.forEach((video)=>{
+                video.comparator=video.LikedUsers.length/(Date.now()-video.createdAt);
+            });
+            allVideos.sort((a, b) => (a.comparator < b.comparator) ? 1 : ((b.comparator < a.comparator) ? -1 : 0));
             res.render("Index/landing", { Videos: allVideos, State: "The United States" });
         }
     });
