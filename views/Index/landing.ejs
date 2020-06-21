@@ -116,11 +116,9 @@
                 <p>From <%=video.author.Username%></p>
                 <p class="card-text"><%=video.VideoDescription%></p>
                 <p>
-                    <span id="Likes"><%=video.LikedUsers.length%></span>
+                    <span class="LikesQuantity"><%=video.LikedUsers.length%></span>
                     Likes
                 </p>
-
-
                 <%if(currentUser!==null){%>
                 <%if(video.LikedUsers.some(user=>{return(user.Username===currentUser.Username)})){%>
                     <!--Show Unlike by default-->
@@ -182,20 +180,15 @@
             crossorigin="anonymous"></script>
         <!--Submit A form using AJAX-->
         <script>
-            var likes = document.getElementById("Likes");
-            var LikeForm=document.querySelector(".Like");
-            var UnlikeForm=document.querySelector(".Unlike");
-            var LikeURL=document.querySelector(".Like").action;
-            var UnlikeURL=document.querySelector(".Unlike").action;
             $(".Like").submit((event) => {
                 event.preventDefault();
                 $.ajax({
                     type: "POST",
-                    url: LikeURL,
+                    url: event.currentTarget.action,
                     success: function (data) {
-                        document.getElementById("Likes").innerHTML=parseInt(likes.innerHTML) + 1;
-                        LikeForm.style.display="none";
-                        UnlikeForm.style.display="inline";
+                        event.target.parentNode.querySelector(".LikesQuantity").innerHTML=parseInt(event.target.parentNode.querySelector(".LikesQuantity").innerHTML) + 1;
+                        event.currentTarget.style.display="none";
+                        event.target.parentNode.querySelector(".Unlike").style.display="inline";
                     }
                 });
             });
@@ -203,11 +196,11 @@
                     event.preventDefault();
                     $.ajax({
                     type: "POST",
-                    url: UnlikeURL,
+                    url: event.currentTarget.action,
                     success: function (data) {
-                        document.getElementById("Likes").innerHTML=parseInt(likes.innerHTML) - 1;
-                        LikeForm.style.display="inline";
-                        UnlikeForm.style.display="none";
+                        event.target.parentNode.querySelector(".LikesQuantity").innerHTML=parseInt(event.target.parentNode.querySelector(".LikesQuantity").innerHTML) - 1;
+                        event.target.parentNode.querySelector(".Like").style.display="inline";
+                        event.currentTarget.style.display="none";
                     }
                 });
                 });

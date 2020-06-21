@@ -31,11 +31,12 @@ router.put("/:id/like",middleware.isLoggedIn, (req,res)=>{
         if(err){
             console.log(err);
         }else{
-            //Add Security and Optimizations
             const likingUser={Username:req.session.user.Username};
-            foundVideo.LikedUsers.push(likingUser);
-            foundVideo.save();
-            res.sendStatus(200);
+            if(foundVideo.LikedUsers.indexOf(likingUser)===-1){
+                foundVideo.LikedUsers.push(likingUser);
+                foundVideo.save();
+                res.sendStatus(200);
+            }
         }
     });
 });
