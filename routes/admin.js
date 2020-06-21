@@ -4,6 +4,7 @@ const Users = require("../models/user");
 const Videos = require("../models/video");
 const Moderators = require("../models/moderator");
 const Admin = require("../models/admin");
+const ContactMessages=require("../models/ContactMessages");
 const bcrypt = require("bcryptjs");
 const fetch = require('node-fetch');
 const { stringify } = require('querystring');
@@ -90,5 +91,11 @@ router.post("/signup", async (req, res) => {
             });
         }
     }
+});
+router.post("/contact", (req,res)=>{
+    Message=new ContactMessages(req.body);
+    Message.save();
+    req.flash("success", "Message Sent To admins");
+    res.redirect("/");
 });
 module.exports = router;

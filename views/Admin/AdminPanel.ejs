@@ -172,6 +172,10 @@ a.article:hover {
                     <a href="#" onclick="viewStats()"><i class="fa fa-line-chart" aria-hidden="true"></i>
                         View Stats</a>
                 </li>
+                <li>
+                    <a href="#" onclick="viewMessages()"><i class="fa fa-envelope" aria-hidden="true"></i>
+                        View Messages</a>
+                </li>
             </ul>
         </nav>
         <!-- Page Content  -->
@@ -316,6 +320,9 @@ a.article:hover {
                 <div id="ViewStats" style="display: none;">
                     <h1>Stats List will go here</h1>
                 </div>
+                <div id="ViewMessages" style="display: none;">
+                    <h1>Messages</h1>
+                </div>
             </div>
         </div>
     </div>
@@ -332,12 +339,14 @@ a.article:hover {
     var ReportList=document.getElementById("ReportList");
     var ModeratorList=document.getElementById("ModeratorList");
     var ViewStats=document.getElementById("ViewStats");
+    var ViewMessages=document.getElementById("ViewMessages");
     function showUserList(){
         UserList.style.display="block";
         VideoList.style.display="none";
         ReportList.style.display="none";
         ModeratorList.style.display="none";
         ViewStats.style.display="none";
+        ViewMessages.style.display="none";
     }
     function showVideoList(){
         UserList.style.display="none";
@@ -345,6 +354,7 @@ a.article:hover {
         ReportList.style.display="none";
         ModeratorList.style.display="none";
         ViewStats.style.display="none";
+        ViewMessages.style.display="none";
     }
     function showModeratorList(){
         UserList.style.display="none";
@@ -352,6 +362,7 @@ a.article:hover {
         ReportList.style.display="none";
         ModeratorList.style.display="block";
         ViewStats.style.display="none";
+        ViewMessages.style.display="none";
     }
     function showReportList(){
         UserList.style.display="none";
@@ -359,6 +370,7 @@ a.article:hover {
         ReportList.style.display="block";
         ModeratorList.style.display="none";
         ViewStats.style.display="none";
+        ViewMessages.style.display="none";
     }
     function viewStats(){
         UserList.style.display="none";
@@ -366,6 +378,15 @@ a.article:hover {
         ReportList.style.display="none";
         ModeratorList.style.display="none";
         ViewStats.style.display="block";
+        ViewMessages.style.display="none";
+    }
+    function viewMessages(){
+        UserList.style.display="none";
+        VideoList.style.display="none";
+        ReportList.style.display="none";
+        ModeratorList.style.display="none";
+        ViewStats.style.display="none";
+        ViewMessages.style.display="block";
     }
 </script>
 </body>

@@ -64,7 +64,6 @@ router.post("/signup", function (req, res) {
     let hash = bcrypt.hashSync(req.body.password, 14);
     req.body.password = hash;
     let registered_user = new User(req.body);
-    console.log(registered_user);
     registered_user.save(function (err, doc) {
         if (err) {
             req.flash("error", "Already Taken Email/Username");
@@ -117,7 +116,7 @@ router.get("/contact", (req,res)=>{
 
 // @GET request to display the Landing Page (Show "Trending" Videos)
 router.get("/", (req, res) => {
-    Videos.find({}, (err, allVideos) => {
+    Videos.find({ModerationStatus: true}, (err, allVideos) => {
         if (err) {
             console.log(err);
         } else {
