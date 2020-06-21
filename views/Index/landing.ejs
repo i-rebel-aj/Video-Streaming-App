@@ -5,11 +5,12 @@
         background-color: rgba(0,44,102,0.95);
     }
     */
-    .quote{
+    .quote {
         text-align: center;
         /*color: rgba(255,221,0);*/
     }
-    .Landing{
+
+    .Landing {
         margin: 16px auto;
         border: 1px solid white;
         background-color: white;
@@ -17,22 +18,27 @@
 </style>
 <div class="container">
     <div class="quote">
-        Race and racism is a reality that so many of us grow up learning to just deal with. But if we ever hope to move past it, it can’t just be on people of colour to deal with it.<b> It’s up to all of us – Black, white, everyone – no matter how well-meaning we think we might be, to do the honest, uncomfortable work of rooting it out.</b> It starts with self-examination and listening to those whose lives are different from our own. It ends with justice, compassion, and empathy that manifests in our lives and on our streets.
+        Race and racism is a reality that so many of us grow up learning to just deal with. But if we ever hope to move
+        past it, it can’t just be on people of colour to deal with it.<b> It’s up to all of us – Black, white, everyone
+            – no matter how well-meaning we think we might be, to do the honest, uncomfortable work of rooting it
+            out.</b> It starts with self-examination and listening to those whose lives are different from our own. It
+        ends with justice, compassion, and empathy that manifests in our lives and on our streets.
         <br>– Michelle Obama
     </div>
     <div class="Landing">
         <div class="Menu">
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                  <a class="nav-link active" href="/" style="color: orangered;">Trending <i class="fa fa-fire" aria-hidden="true" style="color: orangered;"></i></a>
+                    <a class="nav-link active" href="/" style="color: orangered;">Trending <i class="fa fa-fire"
+                            aria-hidden="true" style="color: orangered;"></i></a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="/latest">Latest</a>
+                    <a class="nav-link" href="/latest">Latest</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/uploadVideo">Upload</a>
-                  </li>
-              </ul>
+                </li>
+            </ul>
         </div>
         <div>
             <form action="/viewState" method="POST">
@@ -91,61 +97,121 @@
                     <option value="WI">Wisconsin</option>
                     <option value="WY">Wyoming</option>
                 </select>
-                <button type="submit" class="btn btn-success btn-sm">Search!</button> 
+                <button type="submit" class="btn btn-success btn-sm">Search!</button>
             </form>
             <hr>
         </div>
         <a href="/upload" class="btn-btn-primary"></a>
         <!--A For Loop will go here-->
         <h3>Showing trending videos from <%=State%></h3>
-        <%Videos.forEach(function(video){%> 
-            <div class="card" style="padding-bottom: 20px; padding: 20px;">
-                <video height="240" controls>
-                    <source src="/<%=video.VideoFilePath%>" type="video/mp4">
-                </video>
-                <div class="card-body">
-                  <h5 class="card-title"><%=video.VideoTitle%></h5>
-                  <h7><i class="fa fa-map-marker" aria-hidden="true"></i>
+        <%Videos.forEach(function(video){%>
+        <div class="card" style="padding-bottom: 20px; padding: 20px;">
+            <video height="240" controls>
+                <source src="/<%=video.VideoFilePath%>" type="video/mp4">
+            </video>
+            <div class="card-body">
+                <h5 class="card-title"><%=video.VideoTitle%></h5>
+                <h7><i class="fa fa-map-marker" aria-hidden="true"></i>
                     <%=video.VideoLocation%></h7>
-                  <p>From <%=video.author.Username%></p>
-                  <p class="card-text"><%=video.VideoDescription%></p>
-                  <!--Find that wether existing user has lived video or not-->
-                  <!--If Not liked-->
-                  <form id="LikeButtonForm" action="/video/<%=video._id%>/like" method="POST" style="display: inline;">
-                        <button class="btn btn-outline-success btn-sm" id="LikeButton">Like</button>
-                  </form>
-                  <!--Else Unlike-->
-                  <form id="unlikeButtonForm" action="/video/<%=video._id%>/unlike" method="POST" style="display: inline;">
-                        <button class="btn btn-outline-warning btn-sm" id="UnlikeButton">Unlike</button>
-                  </form>
-                  <%if(currentUser!==null){%>
-                    <%if(currentUser.Username===video.author.Username){%>
-                        <form action="/video/<%=video._id%>?_method=DELETE" method="POST" style="display: inline;">
-                            <button class="btn btn-danger btn-sm">Delete</b>
-                        </form>
+                <p>From <%=video.author.Username%></p>
+                <p class="card-text"><%=video.VideoDescription%></p>
+                <p>
+                    <span id="Likes"><%=video.LikedUsers.length%></span>
+                    Likes
+                </p>
+
+
+                <%if(currentUser!==null){%>
+                <%if(video.LikedUsers.some(user=>{return(user.Username===currentUser.Username)})){%>
+                    <!--Show Unlike by default-->
+                <form class="Unlike" action="/video/<%=video._id%>/unlike?_method=PUT" method="POST"
+                    style="display: inline;">
+                    <button class="btn btn-outline-warning btn-sm" id="UnlikeButton">Unlike</button>
+                </form>
+                <!--Hide This Like Button only Toggle-->
+                <form class="Like" action="/video/<%=video._id%>/like?_method=PUT" method="POST"
+                    style="display: none;">
+                    <button class="btn btn-outline-success btn-sm" id="LikeButton">Like</button>
+                </form>
+                <%}else{%>
+                    <!--Show Like Here-->
+                <form class="Like" action="/video/<%=video._id%>/like?_method=PUT" method="POST"
+                    style="display: inline;">
+                    <button class="btn btn-outline-success btn-sm" id="LikeButton">Like</button>
+                </form>
+                <!--Hide Unlike Here only Toggle-->
+                <form class="Unlike" action="/video/<%=video._id%>/unlike?_method=PUT" method="POST"
+                    style="display: none;">
+                    <button class="btn btn-outline-warning btn-sm" id="UnlikeButton">Unlike</button>
+                </form>
+                <%}%>
                     <%}else{%>
-                        <form action="/report/<%=video._id%>" method="POST" style="display: inline;">
-                            <button class="btn btn-outline-danger btn-sm">Report</b>
-                        </form >
-                    <%}%>
+                <form action="/video/<%=video._id%>/like?_method=PUT" method="POST" style="display: inline;">
+                    <button class="btn btn-outline-success btn-sm" id="LikeButton">Like</button>
+                </form>
+                <%}%>
+
+                <%if(currentUser!==null){%>
+                <%if(currentUser.Username===video.author.Username){%>
+                <form action="/video/<%=video._id%>?_method=DELETE" method="POST" style="display: inline;">
+                    <button class="btn btn-danger btn-sm">Delete</b>
+                </form>
+                <%}else{%>
+                <form action="/report/<%=video._id%>" method="POST" style="display: inline;">
+                    <button class="btn btn-outline-danger btn-sm">Report</b>
+                </form>
+                <%}%>
                     <%}else{%>
-                        <form action="/report/<%=video._id%>" method="POST" style="display: inline;">
-                            <button class="btn btn-outline-danger btn-sm">Report</b>
-                        </form>
-                    <%}%>
+                <form action="/report/<%=video._id%>" method="POST" style="display: inline;">
+                    <button class="btn btn-outline-danger btn-sm">Report</b>
+                </form>
+                <%}%>
+                
                 </div>
               </div>
         <%});%>
-        
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.5.1.js"
+            integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+        <!--Submit A form using AJAX-->
+        <script>
+            var likes = document.getElementById("Likes");
+            var LikeForm=document.querySelector(".Like");
+            var UnlikeForm=document.querySelector(".Unlike");
+            var LikeURL=document.querySelector(".Like").action;
+            var UnlikeURL=document.querySelector(".Unlike").action;
+            $(".Like").submit((event) => {
+                event.preventDefault();
+                $.ajax({
+                    type: "POST",
+                    url: LikeURL,
+                    success: function (data) {
+                        document.getElementById("Likes").innerHTML=parseInt(likes.innerHTML) + 1;
+                        LikeForm.style.display="none";
+                        UnlikeForm.style.display="inline";
+                    }
+                });
+            });
+                $(".Unlike").submit((event) => {
+                    event.preventDefault();
+                    $.ajax({
+                    type: "POST",
+                    url: UnlikeURL,
+                    success: function (data) {
+                        document.getElementById("Likes").innerHTML=parseInt(likes.innerHTML) - 1;
+                        LikeForm.style.display="inline";
+                        UnlikeForm.style.display="none";
+                    }
+                });
+                });
+        </script>
+        </body>
 
-        
-    </div>
-</div>
-    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script>
-
-    </script>    
-</body>
-</html>
+        </html>

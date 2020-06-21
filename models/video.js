@@ -1,5 +1,9 @@
+/*        This is the Video Schema
+ *        VideoLoction Implies the place from which video was uploaded from
+ *
+ */
+
 const mongoose = require('mongoose');
-//Try Some Form of Databse Optimisations
 const videoSchema = mongoose.Schema({
     author: {
         id:{
@@ -18,28 +22,14 @@ const videoSchema = mongoose.Schema({
     VideoFilePath : {
         type: String,
     },
-    VideoLocation: String,
-    VideoViews : {
-        type: Number,
-        default: 0 
+    VideoLocation: {
+        type: String
     },
     LikedUsers:[
         {
             Username: String
         }
     ],
-    UnlikedUsers:[
-        {
-            Username: String
-        }
-    ],
-    LikesQuantity:{
-        type: Number,
-        default: 0
-    },
-    VideoDuration :{
-        type: String
-    },
     ModerationStatus :{
         type: Boolean
     },
