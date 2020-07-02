@@ -18,7 +18,7 @@ const moderatorRoutes=require("./routes/moderator");
 const videoRoutes=require("./routes/video");
 
 //Connecting To Database
-mongoose.connect("mongodb://localhost/BlackLivesMatter");
+mongoose.connect(process.env.DatabaseURL_Production);
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
