@@ -22,7 +22,13 @@ router.get("/dashboard", (req, res) => {
                         if (err) {
                             console.log(err);
                         } else {
-                            res.render("Admin/AdminPanel", { Users: foundUsers, Videos: foundVideos, Moderators: foundModerators });
+                            ContactMessages.find({}, (err, foundMessages)=>{
+                                if(err){
+                                    console.log(err);
+                                }else{  
+                                    res.render("Admin/AdminPanel", { Users: foundUsers, Videos: foundVideos, Moderators: foundModerators, Messages: foundMessages});
+                                }
+                            });
                         }
                     });
                 }
