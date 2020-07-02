@@ -156,7 +156,7 @@ router.get("/uploadVideo", middleware.isLoggedIn, (req, res) => {
 
 //@ GET LATEST APPROOVED VIDEOS
 router.get("/latest", (req, res) => {
-    Videos.find({}, (err, allVideos) => {
+    Videos.find({ModerationStatus: true}, (err, allVideos) => {
         if (err) {
             console.log(error);
         } else {
