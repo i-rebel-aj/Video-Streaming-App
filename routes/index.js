@@ -1,14 +1,15 @@
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
 const multer = require("multer");
-var Videos = require("../models/video");
-var User = require("../models/user");
-var bcrypt = require("bcryptjs");
-var middleware = require("../middleware/index");
+const Videos = require("../models/video");
+const User = require("../models/user");
+const bcrypt = require("bcryptjs");
+const middleware = require("../middleware/index");
 const fs = require('fs')
 const { promisify } = require('util')
 const unlinkAsync = promisify(fs.unlink);
-
+const fetch = require('node-fetch');
+const { stringify } = require('querystring');
 /*===============================================================
     Setting Up Multer Here (To Save the Video in Upload Folder)
 =================================================================*/
@@ -60,23 +61,40 @@ router.get("/logout", middleware.isLoggedIn, function (req, res) {
 });
 
 //@ POST Saving User In the Database
-router.post("/signup", function (req, res) {
-    let hash = bcrypt.hashSync(req.body.password, 14);
-    req.body.password = hash;
-    let registered_user = new User(req.body);
-    console.log(registered_user);
-    registered_user.save(function (err, doc) {
-        if (err) {
-            req.flash("error", "Already Taken Email/Username");
+router.post("/signup", async (req, res) => {
+    //If Captcha wasn't filled
+    if (!req.body['g-recaptcha-response']) {
+        req.flash("error", "Please Select Captcha");
+        res.redirect("/signup");
+    } else {
+        const query = stringify({
+            secret: process.env.CaptchaServerKey,
+            response: req.body.captcha,
+            remoteip: req.connection.remoteAddress
+        });
+        const verifyURL = `https://google.com/recaptcha/api/siteverify?${query}`;
+        const body = await fetch(verifyURL);
+        // If not successful
+        if (body.success !== undefined && !body.success) {
+            req.flash("error", "Captcha Failed");
             res.redirect("/signup");
         } else {
-            req.flash("success", "Signup was successfull, now you can login");
-            res.redirect("/login");
+            //If Success
+            let hash = bcrypt.hashSync(req.body.password, 14);
+            req.body.password = hash;
+            let registered_user = new User(req.body);
+            registered_user.save(function (err, doc) {
+                if (err) {
+                    req.flash("error", "Already Taken Email/Username");
+                    res.redirect("/signup");
+                } else {
+                    req.flash("success", "Signup was successfull, now you can login");
+                    res.redirect("/login");
+                }
+            });
         }
-    });
-
+    }
 });
-
 //@ POST Logging in the User
 router.post("/login", function (req, res) {
     User.findOne({ Username: req.body.Username }, (err, user) => {
@@ -97,18 +115,32 @@ router.post("/login", function (req, res) {
     });
 });
 
+/*==============================================
+    Support Handling
+================================================*/
+router.get("/support", (req, res) => {
+    res.send("Support Page Will Go Here");
+});
+router.get("/contact", (req, res) => {
+    res.render("Index/contact");
+});
+
+
+
+
+
 /*===============================================
     Video Handling
 =================================================*/
 
 // @GET request to display the Landing Page (Show "Trending" Videos)
 router.get("/", (req, res) => {
-    Videos.find({}, (err, allVideos) => {
+    Videos.find({ ModerationStatus: true }, (err, allVideos) => {
         if (err) {
             console.log(err);
         } else {
-            allVideos.forEach((video)=>{
-                video.comparator=video.LikedUsers.length/(Date.now()-video.createdAt);
+            allVideos.forEach((video) => {
+                video.comparator = video.LikedUsers.length / (Date.now() - video.createdAt);
             });
             allVideos.sort((a, b) => (a.comparator < b.comparator) ? 1 : ((b.comparator < a.comparator) ? -1 : 0));
             res.render("Index/landing", { Videos: allVideos, State: "The United States" });
@@ -124,7 +156,7 @@ router.get("/uploadVideo", middleware.isLoggedIn, (req, res) => {
 
 //@ GET LATEST APPROOVED VIDEOS
 router.get("/latest", (req, res) => {
-    Videos.find({}, (err, allVideos) => {
+    Videos.find({ModerationStatus: true}, (err, allVideos) => {
         if (err) {
             console.log(error);
         } else {
@@ -176,8 +208,8 @@ router.post("/uploadVideo", middleware.isLoggedIn, (req, res) => {
                     var videoDetails = req.body;
                     videoDetails.VideoFilePath = req.file.path;
                     videoDetails.author = author;
-                    videoDetails.ModerationStatus=false;
-                    videoDetails.ReportStatus=false;
+                    videoDetails.ModerationStatus = false;
+                    videoDetails.ReportStatus = false;
                     Videos.create(videoDetails, (err, newlyCreated) => {
                         if (err) {
                             console.log(err);
@@ -195,13 +227,13 @@ router.post("/uploadVideo", middleware.isLoggedIn, (req, res) => {
 });
 
 // @POST To Add Video to be reported
-router.post("/report/:id",middleware.isLoggedIn, (req,res)=>{
-    Videos.findById(req.params.id, (err, foundVideo)=>{
-        if(err){
+router.post("/report/:id", middleware.isLoggedIn, (req, res) => {
+    Videos.findById(req.params.id, (err, foundVideo) => {
+        if (err) {
             console.log(err);
-        }else{
+        } else {
             //Mutating Directly a bad programming practice
-            foundVideo.ReportStatus=true;
+            foundVideo.ReportStatus = true;
             //console.log("After Report Status");
             //console.log(foundVideo);
             foundVideo.save();
@@ -217,17 +249,17 @@ router.delete("/video/:id", upload, async (req, res) => {
         if (err) {
             console.log(err);
         } else {
-            User.findById(foundVideo.author.id, (err, foundUser)=>{
-                if(err){
+            User.findById(foundVideo.author.id, (err, foundUser) => {
+                if (err) {
                     console.log(err);
-                }else{
+                } else {
                     //console.log("User who is author of the video")
                     //console.log(foundUser);
                     //const index=foundUser.Videos.findIndex(req.params.id);
-                    foundUser.Videos.forEach((id, index)=>{
-                        if(id.equals(req.params.id)){
+                    foundUser.Videos.forEach((id, index) => {
+                        if (id.equals(req.params.id)) {
                             console.log(index);
-                            foundUser.Videos.splice(index,1);
+                            foundUser.Videos.splice(index, 1);
                             console.log(foundUser);
                             foundUser.save();
                         }
@@ -236,11 +268,11 @@ router.delete("/video/:id", upload, async (req, res) => {
             });
             await unlinkAsync(foundVideo.VideoFilePath);
             foundVideo.remove();
-            backURL=req.header('Referer') || '/';
+            backURL = req.header('Referer') || '/';
             req.flash("error", "Video Deleted Successfully");
-            if(backURL.includes("/video")){
+            if (backURL.includes("/video")) {
                 res.redirect("/admin/dashboard");
-            }else{
+            } else {
                 res.redirect("back");
             }
         }

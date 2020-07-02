@@ -4,6 +4,7 @@ const Users = require("../models/user");
 const Videos = require("../models/video");
 const Moderators = require("../models/moderator");
 const Admin = require("../models/admin");
+const ContactMessages=require("../models/ContactMessages");
 const bcrypt = require("bcryptjs");
 const fetch = require('node-fetch');
 const { stringify } = require('querystring');
@@ -21,7 +22,13 @@ router.get("/dashboard", (req, res) => {
                         if (err) {
                             console.log(err);
                         } else {
-                            res.render("Admin/AdminPanel", { Users: foundUsers, Videos: foundVideos, Moderators: foundModerators });
+                            ContactMessages.find({}, (err, foundMessages)=>{
+                                if(err){
+                                    console.log(err);
+                                }else{  
+                                    res.render("Admin/AdminPanel", { Users: foundUsers, Videos: foundVideos, Moderators: foundModerators, Messages: foundMessages});
+                                }
+                            });
                         }
                     });
                 }
@@ -90,5 +97,11 @@ router.post("/signup", async (req, res) => {
             });
         }
     }
+});
+router.post("/contact", (req,res)=>{
+    Message=new ContactMessages(req.body);
+    Message.save();
+    req.flash("success", "Message Sent To admins");
+    res.redirect("/");
 });
 module.exports = router;
