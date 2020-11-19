@@ -1,61 +1,29 @@
 <%-include("../partials/header")-%>
-<style>
-    /*
-    body{
-        background-color: rgba(0,44,102,0.95);
-    }
-    */
-    .quote {
-        text-align: center;
-        font-size: 20px;
-        /*color: rgba(255,221,0);*/
-    }
 
-    .Landing {
-        margin: 16px auto;
-        border: 1px solid white;
-        background-color: white;
-    }
-    .primary{
-        margin-left: 10px;
-        max-width: 65%;
-        float: left;
-    }
-    .secondary{
-        margin-right: 10px;
-        max-width: 25%;
-        float: right;
-    }
-</style>
+    <head>
+        <link rel="stylesheet" href="/public/CSS/landing.css" type="text/css">
+    </head>
+    <div class="primary">
 
-<div class="primary">
-    <div class="quote">
-        Race and racism is a reality that so many of us grow up learning to just deal with. But if we ever hope to move
-        past it, it can’t just be on people of colour to deal with it.<b> It’s up to all of us – Black, white, everyone
-            – no matter how well-meaning we think we might be, to do the honest, uncomfortable work of rooting it
-            out.</b> It starts with self-examination and listening to those whose lives are different from our own. It
-        ends with justice, compassion, and empathy that manifests in our lives and on our streets.
-        <br>– Michelle Obama
-    </div>
-    <div class="Landing">
-        <div class="Menu">
-            <ul class="nav nav-tabs">
-                <li class="nav-item">
-                    <a class="nav-link active" href="/" style="color: orangered;">Trending <i class="fa fa-fire"
+        <div class="Landing">
+            <div class="Menu">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/" style="color: orangered;">Trending <i class="fa fa-fire"
                             aria-hidden="true" style="color: orangered;"></i></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/latest">Latest</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/uploadVideo">Upload</a>
-                </li>
-            </ul>
-        </div>
-        <div>
-            <form action="/viewState" method="POST">
-                <label>From State </label>
-                <select name="State">
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/latest">Latest</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/uploadVideo">Upload</a>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <form action="/viewState" method="POST">
+                    <label>From State </label>
+                    <select name="State">
                     <option value="None" selected>Choose State</option>
                     <option value="AL">Alabama</option>
                     <option value="AK">Alaska</option>
@@ -109,62 +77,66 @@
                     <option value="WI">Wisconsin</option>
                     <option value="WY">Wyoming</option>
                 </select>
-                <button type="submit" class="btn btn-success btn-sm">Search!</button>
-            </form>
-            <hr>
-        </div>
-        <a href="/upload" class="btn-btn-primary"></a>
-        <!--A For Loop will go here-->
-        <h3>Showing trending videos from <%=State%></h3>
-        <%Videos.forEach(function(video){%>
-        <div class="card" style="padding-bottom: 20px; padding: 20px;">
-            <video height="240" controls>
+                    <button type="submit" class="btn btn-success btn-sm">Search!</button>
+                </form>
+                <hr>
+            </div>
+            <a href="/upload" class="btn-btn-primary"></a>
+            <!--A For Loop will go here-->
+            <h3>Showing trending videos from
+                <%=State%>
+            </h3>
+            <%Videos.forEach(function(video){%>
+                <div class="card" style="padding-bottom: 20px; padding: 20px;">
+                    <video height="240" controls>
                 <source src="/<%=video.VideoFilePath%>" type="video/mp4">
             </video>
-            <div class="card-body">
-                <h5 class="card-title"><%=video.VideoTitle%></h5>
-                <h7><i class="fa fa-map-marker" aria-hidden="true"></i>
-                    <%=video.VideoLocation%></h7>
-                <p>From <%=video.author.Username%></p>
-                <p class="card-text"><%=video.VideoDescription%></p>
-                <p>
-                    <span class="LikesQuantity"><%=video.LikedUsers.length%></span>
-                    Likes
-                </p>
-                <%if(currentUser!==null){%>
-                <%if(video.LikedUsers.some(user=>{return(user.Username===currentUser.Username)})){%>
-                    <!--Show Unlike by default-->
-                <form class="Unlike" action="/video/<%=video._id%>/unlike?_method=PUT" method="POST"
-                    style="display: inline;">
-                    <button class="btn btn-outline-warning btn-sm" id="UnlikeButton">Unlike</button>
-                </form>
-                <!--Hide This Like Button only Toggle-->
-                <form class="Like" action="/video/<%=video._id%>/like?_method=PUT" method="POST"
-                    style="display: none;">
-                    <button class="btn btn-outline-success btn-sm" id="LikeButton">Like</button>
-                </form>
-                <%}else{%>
-                    <!--Show Like Here-->
-                <form class="Like" action="/video/<%=video._id%>/like?_method=PUT" method="POST"
-                    style="display: inline;">
-                    <button class="btn btn-outline-success btn-sm" id="LikeButton">Like</button>
-                </form>
-                <!--Hide Unlike Here only Toggle-->
-                <form class="Unlike" action="/video/<%=video._id%>/unlike?_method=PUT" method="POST"
-                    style="display: none;">
-                    <button class="btn btn-outline-warning btn-sm" id="UnlikeButton">Unlike</button>
-                </form>
-                <%}%>
-                    <%}else{%>
-                <form action="/video/<%=video._id%>/like?_method=PUT" method="POST" style="display: inline;">
-                    <button class="btn btn-outline-success btn-sm" id="LikeButton">Like</button>
-                </form>
-                <%}%>
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <%=video.VideoTitle%>
+                        </h5>
+                        <h7><i class="fa fa-map-marker" aria-hidden="true"></i>
+                            <%=video.VideoLocation%>
+                        </h7>
+                        <p>From
+                            <%=video.author.Username%>
+                        </p>
+                        <p class="card-text">
+                            <%=video.VideoDescription%>
+                        </p>
+                        <p>
+                            <span class="LikesQuantity"><%=video.LikedUsers.length%></span> Likes
+                        </p>
+                        <%if(currentUser!==null){%>
+                            <%if(video.LikedUsers.some(user=>{return(user.Username===currentUser.Username)})){%>
+                                <!--Show Unlike by default-->
+                                <form class="Unlike" action="/video/<%=video._id%>/unlike?_method=PUT" method="POST" style="display: inline;">
+                                    <button class="btn btn-outline-warning btn-sm" id="UnlikeButton">Unlike</button>
+                                </form>
+                                <!--Hide This Like Button only Toggle-->
+                                <form class="Like" action="/video/<%=video._id%>/like?_method=PUT" method="POST" style="display: none;">
+                                    <button class="btn btn-outline-success btn-sm" id="LikeButton">Like</button>
+                                </form>
+                                <%}else{%>
+                                    <!--Show Like Here-->
+                                    <form class="Like" action="/video/<%=video._id%>/like?_method=PUT" method="POST" style="display: inline;">
+                                        <button class="btn btn-outline-success btn-sm" id="LikeButton">Like</button>
+                                    </form>
+                                    <!--Hide Unlike Here only Toggle-->
+                                    <form class="Unlike" action="/video/<%=video._id%>/unlike?_method=PUT" method="POST" style="display: none;">
+                                        <button class="btn btn-outline-warning btn-sm" id="UnlikeButton">Unlike</button>
+                                    </form>
+                                    <%}%>
+                                        <%}else{%>
+                                            <form action="/video/<%=video._id%>/like?_method=PUT" method="POST" style="display: inline;">
+                                                <button class="btn btn-outline-success btn-sm" id="LikeButton">Like</button>
+                                            </form>
+                                            <%}%>
 
-                <%if(currentUser!==null){%>
-                <%if(currentUser.Username===video.author.Username){%>
-                <form action="/video/<%=video._id%>?_method=DELETE" method="POST" style="display: inline;">
-                    <button class="btn btn-danger btn-sm">Delete</b>
+                                                <%if(currentUser!==null){%>
+                                                    <%if(currentUser.Username===video.author.Username){%>
+                                                        <form action="/video/<%=video._id%>?_method=DELETE" method="POST" style="display: inline;">
+                                                            <button class="btn btn-danger btn-sm">Delete</b>
                 </form>
                 <%}else{%>
                 <form action="/report/<%=video._id%>" method="POST" style="display: inline;">

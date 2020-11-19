@@ -1,32 +1,31 @@
 {
-  "name": "blacklivesmatter-project",
-  "version": "1.0.0",
-  "description": "Black Lives Matter",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
-  },
-  "author": "Akshay Jain",
-  "license": "ISC",
-  "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "body-parser": "^1.19.0",
-    "client-sessions": "^0.8.0",
-    "connect-flash": "^0.1.1",
-    "cookie-parser": "^1.4.5",
-    "dotenv": "^8.2.0",
-    "ejs": "^3.0.1",
-    "express": "^4.17.1",
-    "express-session": "^1.17.1",
-    "flash": "^1.1.0",
-    "fs": "0.0.1-security",
-    "gridfs-stream": "^1.1.1",
-    "method-override": "^3.0.0",
-    "mongoose": "^5.8.7",
-    "multer": "^1.3.0",
-    "multer-gridfs-storage": "^3.0.0",
-    "node-fetch": "^2.6.0",
-    "util": "^0.12.3"
-  }
+    "name": "Video-Streaming-Application",
+    "version": "1.0.0",
+    "description": "Video Streaming Application",
+    "main": "app.js",
+    "scripts": {
+        "start": "node app.js"
+    },
+    "author": "Akshay Jain",
+    "license": "ISC",
+    "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "body-parser": "^1.19.0",
+        "client-sessions": "^0.8.0",
+        "connect-flash": "^0.1.1",
+        "cookie-parser": "^1.4.5",
+        "dotenv": "^8.2.0",
+        "ejs": "^3.0.1",
+        "express": "^4.17.1",
+        "express-session": "^1.17.1",
+        "flash": "^1.1.0",
+        "fs": "0.0.1-security",
+        "gridfs-stream": "^1.1.1",
+        "method-override": "^3.0.0",
+        "mongoose": "^5.8.7",
+        "multer": "^1.3.0",
+        "multer-gridfs-storage": "^3.0.0",
+        "node-fetch": "^2.6.0",
+        "util": "^0.12.3"
+    }
 }
