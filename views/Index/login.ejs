@@ -1,20 +1,31 @@
 <%- include("../partials/header")%>
-<div class="container">
-    <h1>Login Here</h1>
-    <form action="/login" method="POST">
-        <div class="form-group">
-            <label>Username:-</label>
-            <br>
-            <input class="form-control" type="text" name="Username" placeholder="Enrollment Number" required>
+
+    <head>
+        <link rel="stylesheet" href="/public/CSS/Forms.css" type="text/css">
+    </head>
+    <div class="container">
+        <div class="global-container">
+            <div class="card login-form">
+                <div class="card-body">
+                    <h3 class="card-title text-center">Log in to the platform</h3>
+                    <div class="card-text">
+                        <form action="/login" method="POST">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Username</label>
+                                <input class="form-control form-control-sm" type="text" name="Username" placeholder="Username" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Password</label>
+                                <input class="form-control form-control-sm" type="password" name="password" placeholder="password" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+
+                            <div class="sign-up">
+                                Don't have an account? <a href="/signup">Create One</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label>Password</label>
-            <br>
-            <input class="form-control" type="password" name="password" placeholder="password" required>
-        </div>
-        <div class="form-group">
-            <button class="btn btn-lg btn-info btn-block">Submit!</button>
-        </div>
-    </form>
-</div>
-<%-include("../partials/footer")%>
+        <%-include("../partials/footer")%>

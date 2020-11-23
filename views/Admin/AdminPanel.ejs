@@ -1,12 +1,14 @@
 <html>
-    <head>
-        <title>
-            Admin Panel
-        </title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="/public/CSS/AdminPanel.css" type="text/css">
-    </head>
+
+<head>
+    <title>
+        Admin Panel
+    </title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/public/CSS/AdminPanel.css" type="text/css">
+</head>
+
 <body>
     <div class="wrapper">
         <!-- Sidebar  -->
@@ -27,10 +29,6 @@
                 <li>
                     <a href="#" onclick="showReportList()"><i class="fa fa-flag" aria-hidden="true"></i>
                         Reports</a>
-                </li>
-                <li>
-                    <a href="#" onclick="showModeratorList()"><i class="fa fa-user-md" aria-hidden="true"></i>
-                        Moderators</a>
                 </li>
                 <li>
                     <a href="#" onclick="viewStats()"><i class="fa fa-line-chart" aria-hidden="true"></i>
@@ -55,166 +53,178 @@
                 <% if(error &&error.length>0){%>
                     <div class="alert alert-danger" role="alert">
                         <%=error%>
-                      </div>
+                    </div>
                     <%}%>
-                  <% if(success &&success.length>0){%>
-                    <div class="alert alert-success" role="alert">
-                        <%=success%>
-                      </div>
-                    <%}%> 
-                <div id="UserList">
-                    <h4>Viewing Users</h4> 
-                    <table class="table">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Videos Uploaded</th>
-                                <th>Username</th>
-                                <th>Joined At</th>
-                                <th>View Videos</th>
-                                <th>Delete</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <%Users.forEach(function(user){%>
-                                <tr>
-                                    <td><%=user._id%></td>
-                                    <td><%=user.Name%></td>
-                                    <td><%=user.Videos.length%></td>
-                                    <td><%=user.Username%></td>
-                                    <td><%=user.createdAt%></td>
-                                    <td><a href="#" class="btn btn-outline-primary btn-sm">View</a></td>
-                                    <td><a href="#" class="btn btn-outline-danger btn-sm">Delete</a></td>
-                                </tr>
-                            <%});%>
-                        </tbody>
-                    </table>
-                </div>
-                <div id="VideoList" style="display: none;">
-                    <h4>Viewing All Non-Reported Videos</h4>
-                    <table class="table">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th>ID</th>
-                                <th>Video Title</th>
-                                <th>Moderation Status</th>
-                                <th>Author</th>
-                                <th>Uploaded At</th>
-                                <th>View Video</th>
-                                <th>Delete</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <%Videos.forEach(function(video){ %>
-                                <%if(video.ReportStatus===false){%>
-                                <tr>
-                                    <td><%=video._id%></td>
-                                    <td><%=video.VideoTitle%></td>
-                                    <%if(video.ModerationStatus===false){%>
-                                        <td><a href="/video/view/<%=video._id%>" class="btn btn-outline-success btn-sm">Moderate</a></td>
-                                    <%}else{%>
-                                        <td>Moderated</td>
-                                    <%}%>
-                                    <td><%=video.author.Username%></td>
-                                    <td><%=video.createdAt%></td>
-                                    <td><a href="/video/view/<%=video._id%>" class="btn btn-outline-primary btn-sm">View</a></td>
-                                    <td><form action="/video/<%=video._id%>?_method=DELETE" method="POST"><button class="btn btn-outline-danger btn-sm">Delete</button></form></td>
-                                </tr>
-                                <%}%>
-                            <%});%>
-                        </tbody>
-                    </table>
-                </div>
-                <div id="ReportList" style="display: none;">
-                    <h4>Following Videos were found inappropriate to others</h4>
-                    <table class="table">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th>ID</th>
-                                <th>Video Title</th>
-                                <th>Author</th>
-                                <th>Uploaded At</th>
-                                <th>View Video</th>
-                                <th>Delete</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <%Videos.forEach(function(video){%>
-                                <%if(video.ReportStatus===true){%>
-                                <tr>
-                                    <td><%=video._id%></td>
-                                    <td><%=video.VideoTitle%></td>
-                                    <td><%=video.author.Username%></td>
-                                    <td><%=video.createdAt%></td>
-                                    <td><a href="/video/<%=video._id%>" class="btn btn-outline-primary btn-sm">View</a></td>
-                                    <td><form action="/video/<%=video._id%>?_method=DELETE" method="POST"><button class="btn btn-outline-danger btn-sm">Delete</button></form></td>
-                                </tr>
-                                <%}%>
-                            <%});%>
-                        </tbody>
-                    </table>
-                </div>
-                <div id="ModeratorList" style="display: none;">
-                    <h4>Viewing Moderators</h4> 
-                    <table class="table">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Username</th>
-                                <th>Videos Moderated</th>
-                                <th>Delete</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <%Moderators.forEach(function(moderator){%>
-                                <tr>
-                                    <td><%=moderator._id%></td>
-                                    <td><%=moderator.Name%></td>
-                                    <td><%=moderator.Username%></td>
-                                    <td><%=moderator.VideosModerated.length%></td>
-                                    <td><a href="#" class="btn btn-outline-primary btn-sm">View</a></td>
-                                    <td><a href="#" class="btn btn-outline-danger btn-sm">Delete</a></td>
-                                </tr>
-                            <%});%>
-                        </tbody>
-                    </table>
-                    <a href="#" class="btn btn-outline-success">Add Moderators</a>
-                </div>
-                <div id="ViewStats" style="display: none;">
-                    <h1>Stats List will go here</h1>
-                </div>
-                <div id="ViewMessages" style="display: none;">
-                    <h1>Messages</h1>
-                    <table class="table">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th>From</th>
-                                <th>Email</th>
-                                <th>Sent At</th>
-                                <th>Message</th>
-                                <th>Delete</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <%Messages.forEach(function(message){%>
-                                <tr>
-                                    <td><%=message.FromName%></td>
-                                    <td><%=message.FromEmail%></td>
-                                    <td><%=message.createdAt%></td>
-                                    <td><%=message.Message%></td>
-                                    <td><a href="#" class="btn btn-outline-danger btn-sm">Delete</a></td>
-                                </tr>
-                            <%});%>
-                        </tbody>
-                    </table>
-                </div>
+                        <% if(success &&success.length>0){%>
+                            <div class="alert alert-success" role="alert">
+                                <%=success%>
+                            </div>
+                            <%}%>
+                                <div id="UserList">
+                                    <h4>Viewing Users</h4>
+                                    <table class="table">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Name</th>
+                                                <th>Videos Uploaded</th>
+                                                <th>Username</th>
+                                                <th>Joined At</th>
+                                                <th>View Videos</th>
+                                                <th>Delete</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <%Users.forEach(function(user){%>
+                                                <tr>
+                                                    <td>
+                                                        <%=user._id%>
+                                                    </td>
+                                                    <td>
+                                                        <%=user.Name%>
+                                                    </td>
+                                                    <td>
+                                                        <%=user.Videos.length%>
+                                                    </td>
+                                                    <td>
+                                                        <%=user.Username%>
+                                                    </td>
+                                                    <td>
+                                                        <%=user.createdAt%>
+                                                    </td>
+                                                    <td><a href="#" class="btn btn-outline-primary btn-sm">View</a></td>
+                                                    <td><a href="#" class="btn btn-outline-danger btn-sm">Delete</a></td>
+                                                </tr>
+                                                <%});%>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div id="VideoList" style="display: none;">
+                                    <h4>Viewing All Non-Reported Videos</h4>
+                                    <table class="table">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Video Title</th>
+                                                <th>Moderation Status</th>
+                                                <th>Author</th>
+                                                <th>Uploaded At</th>
+                                                <th>View Video</th>
+                                                <th>Delete</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <%Videos.forEach(function(video){ %>
+                                                <%if(video.ReportStatus===false){%>
+                                                    <tr>
+                                                        <td>
+                                                            <%=video._id%>
+                                                        </td>
+                                                        <td>
+                                                            <%=video.VideoTitle%>
+                                                        </td>
+                                                        <%if(video.ModerationStatus===false){%>
+                                                            <td><a href="/video/view/<%=video._id%>" class="btn btn-outline-success btn-sm">Moderate</a></td>
+                                                            <%}else{%>
+                                                                <td>Moderated</td>
+                                                                <%}%>
+                                                                    <td>
+                                                                        <%=video.author.Username%>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%=video.createdAt%>
+                                                                    </td>
+                                                                    <td><a href="/video/view/<%=video._id%>" class="btn btn-outline-primary btn-sm">View</a></td>
+                                                                    <td>
+                                                                        <form action="/video/<%=video._id%>?_method=DELETE" method="POST"><button class="btn btn-outline-danger btn-sm">Delete</button></form>
+                                                                    </td>
+                                                    </tr>
+                                                    <%}%>
+                                                        <%});%>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div id="ReportList" style="display: none;">
+                                    <h4>Following Videos were found inappropriate to others</h4>
+                                    <table class="table">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Video Title</th>
+                                                <th>Author</th>
+                                                <th>Uploaded At</th>
+                                                <th>View Video</th>
+                                                <th>Delete</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <%Videos.forEach(function(video){%>
+                                                <%if(video.ReportStatus===true){%>
+                                                    <tr>
+                                                        <td>
+                                                            <%=video._id%>
+                                                        </td>
+                                                        <td>
+                                                            <%=video.VideoTitle%>
+                                                        </td>
+                                                        <td>
+                                                            <%=video.author.Username%>
+                                                        </td>
+                                                        <td>
+                                                            <%=video.createdAt%>
+                                                        </td>
+                                                        <td><a href="/video/view/<%=video._id%>" class="btn btn-outline-primary btn-sm">View</a></td>
+                                                        <td>
+                                                            <form action="/video/<%=video._id%>?_method=DELETE" method="POST"><button class="btn btn-outline-danger btn-sm">Delete</button></form>
+                                                        </td>
+                                                    </tr>
+                                                    <%}%>
+                                                        <%});%>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div id="ViewStats" style="display: none;">
+                                    <h1>Stats List will go here</h1>
+                                </div>
+                                <div id="ViewMessages" style="display: none;">
+                                    <h1>Messages</h1>
+                                    <table class="table">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th>From</th>
+                                                <th>Email</th>
+                                                <th>Sent At</th>
+                                                <th>Message</th>
+                                                <th>Delete</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <%Messages.forEach(function(message){%>
+                                                <tr>
+                                                    <td>
+                                                        <%=message.FromName%>
+                                                    </td>
+                                                    <td>
+                                                        <%=message.FromEmail%>
+                                                    </td>
+                                                    <td>
+                                                        <%=message.createdAt%>
+                                                    </td>
+                                                    <td>
+                                                        <%=message.Message%>
+                                                    </td>
+                                                    <td><a href="#" class="btn btn-outline-danger btn-sm">Delete</a></td>
+                                                </tr>
+                                                <%});%>
+                                        </tbody>
+                                    </table>
+                                </div>
             </div>
         </div>
     </div>
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-<script src="/public/Js/AdminPanel.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="/public/Js/AdminPanel.js"></script>
 </body>
+
 </html>

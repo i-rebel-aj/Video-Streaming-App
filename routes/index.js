@@ -62,44 +62,23 @@ router.get("/logout", middleware.isLoggedIn, function(req, res) {
 
 //@ POST Saving User In the Database
 router.post("/signup", async(req, res) => {
-    //If Captcha wasn't filled
-    if (!req.body['g-recaptcha-response']) {
-        req.flash("error", "Please Select Captcha");
-        res.redirect("/signup");
-    } else {
-        const query = stringify({
-            secret: process.env.CaptchaServerKey,
-            response: req.body.captcha,
-            remoteip: req.connection.remoteAddress
-        });
-        const verifyURL = `https://google.com/recaptcha/api/siteverify?${query}`;
-        const body = await fetch(verifyURL);
-        // If not successful
-        if (body.success !== undefined && !body.success) {
-            req.flash("error", "Captcha Failed");
+    let hash = bcrypt.hashSync(req.body.password, 14);
+    req.body.password = hash;
+    let registered_user = new User(req.body);
+    registered_user.save(function(err, doc) {
+        if (err) {
+            req.flash("error", "Already Taken Email/Username");
             res.redirect("/signup");
         } else {
-            //If Success
-            let hash = bcrypt.hashSync(req.body.password, 14);
-            req.body.password = hash;
-            let registered_user = new User(req.body);
-            registered_user.save(function(err, doc) {
-                if (err) {
-                    req.flash("error", "Already Taken Email/Username");
-                    res.redirect("/signup");
-                } else {
-                    req.flash("success", "Signup was successfull, now you can login");
-                    res.redirect("/login");
-                }
-            });
+            req.flash("success", "Signup was successfull, now you can login");
+            res.redirect("/login");
         }
-    }
+    });
 });
 //@ POST Logging in the User
 router.post("/login", function(req, res) {
     User.findOne({ Username: req.body.Username }, (err, user) => {
         if (err || !user || !(bcrypt.compareSync(req.body.password, user.password))) {
-            //console.log("Incorrect Email Password");
             req.flash("error", "Incorrect Username/Password");
             req.session.isLoggedIn = false;
             res.redirect("/");
@@ -109,7 +88,6 @@ router.post("/login", function(req, res) {
             //Setting Up the session
             req.session.isLoggedIn = true;
             req.session.user = user;
-            //console.log(req.session.userId);
             res.redirect("/");
         }
     });

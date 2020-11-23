@@ -1,56 +1,36 @@
-<html>
+<%- include("../partials/header")%>
 
-<head>
-    <title>
-        Admin Panel
-    </title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-</head>
-<!--To View Flash messages-->
-<div class="container">
-    <% if(error &&error.length>0){%>
-      <div class="alert alert-danger" role="alert">
-          <%=error%>
-        </div>
-      <%}%>
-    <% if(success &&success.length>0){%>
-      <div class="alert alert-success" role="alert">
-          <%=success%>
-        </div>
-      <%}%> 
-</div>
-<body>
-<div class="container">
-    <h1>Signup for a change!</h1>
-    <form action="/signup" method="POST">
-        <div class="form-group">
-            <label><strong>User Name</strong>
-                <br> 
-            <input class="form-control" type="text" name="Username" placeholder="Username" required>
-        </div>
-        <div class="form-group">
-            <label><strong>Email:-</strong>
-                <br> 
-            <input class="form-control" type="email" name="Email" placeholder="Email" required>
-        </div>
-        <div class="form-group">
-            <label><strong>Name</strong>
-                <br>
-            <input class="form-control" type="text" name="Name" placeholder="Name" required>
-        </div>
-        <div class="form-group">
-        <label><strong>password :</strong><br>
-            <input name="password" id="password" type="password" onkeyup='check();'>
-        </label>
-        </div>
-        <div class="g-reCAPTCHA" data-sitekey="<%=process.env.CaptchaClientKey%>"></div>
-            <div class="form-group">
-                <button class="btn btn-lg btn-info btn-block">Submit!</button>
+    <head>
+        <link rel="stylesheet" href="/public/CSS/Forms.css" type="text/css">
+    </head>
+    <div class="container">
+        <div class="global-container">
+            <div class="card login-form">
+                <div class="card-body">
+                    <h3 class="card-title text-center">Signup to upload videos!</h3>
+                    <div class="card-text">
+                        <form action="/signup" method="POST">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Username</label>
+                                <input class="form-control form-control-sm" type="text" name="Username" placeholder="Username" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Email</label>
+                                <input class="form-control form-control-sm" type="email" name="Email" placeholder="Email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Name</label>
+                                <input class="form-control form-control-sm" type="text" name="Name" placeholder="Name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Password</label>
+                                <input class="form-control form-control-sm" type="password" name="password" placeholder="password" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Sign up!</button>
+                        </form>
+                    </div>
+                </div>
             </div>
-    </form>
-</div>
-</body>
-</html>
+        </div>
+    </div>
+    <%-include("../partials/footer")%>
