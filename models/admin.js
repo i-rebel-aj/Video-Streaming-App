@@ -1,21 +1,21 @@
-var mongoose=require("mongoose");
-var AdminSchema=new mongoose.Schema({
+var mongoose = require("mongoose");
+var AdminSchema = new mongoose.Schema({
     AdminName: {
-        type:String,
+        type: String,
         required: true
     },
     AdminEmail: {
-        type:String,
+        type: String,
         required: true,
         unique: true
     },
     password: {
-        type:String,
+        type: String,
         required: true
     },
-    ApproovedStatus:{
+    ApproovedStatus: {
         type: Boolean,
         required: true
     }
-},{ timestamps: true });
-module.exports=mongoose.model("Admin", AdminSchema);
+}, { timestamps: true });
+module.exports = mongoose.model("Admin", AdminSchema);

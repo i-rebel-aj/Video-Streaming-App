@@ -15,10 +15,10 @@ const { stringify } = require('querystring');
 =================================================================*/
 //cb stands for callback
 var storage = multer.diskStorage({
-    destination: function (req, file, cb) {
+    destination: function(req, file, cb) {
         cb(null, 'uploads')
     },
-    filename: function (req, file, cb) {
+    filename: function(req, file, cb) {
         //const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
         cb(null, `${Date.now()}_${file.originalname}`)
     },
@@ -48,9 +48,9 @@ router.get("/login", (req, res) => {
 });
 
 //@ SHOW USER LOG OUT PAGE
-router.get("/logout", middleware.isLoggedIn, function (req, res) {
+router.get("/logout", middleware.isLoggedIn, function(req, res) {
     if (req.session) {
-        req.session.destroy(function (err) {
+        req.session.destroy(function(err) {
             if (err) {
                 return next(err);
             } else {
@@ -61,7 +61,7 @@ router.get("/logout", middleware.isLoggedIn, function (req, res) {
 });
 
 //@ POST Saving User In the Database
-router.post("/signup", async (req, res) => {
+router.post("/signup", async(req, res) => {
     //If Captcha wasn't filled
     if (!req.body['g-recaptcha-response']) {
         req.flash("error", "Please Select Captcha");
@@ -83,7 +83,7 @@ router.post("/signup", async (req, res) => {
             let hash = bcrypt.hashSync(req.body.password, 14);
             req.body.password = hash;
             let registered_user = new User(req.body);
-            registered_user.save(function (err, doc) {
+            registered_user.save(function(err, doc) {
                 if (err) {
                     req.flash("error", "Already Taken Email/Username");
                     res.redirect("/signup");
@@ -96,7 +96,7 @@ router.post("/signup", async (req, res) => {
     }
 });
 //@ POST Logging in the User
-router.post("/login", function (req, res) {
+router.post("/login", function(req, res) {
     User.findOne({ Username: req.body.Username }, (err, user) => {
         if (err || !user || !(bcrypt.compareSync(req.body.password, user.password))) {
             //console.log("Incorrect Email Password");
@@ -143,7 +143,7 @@ router.get("/", (req, res) => {
                 video.comparator = video.LikedUsers.length / (Date.now() - video.createdAt);
             });
             allVideos.sort((a, b) => (a.comparator < b.comparator) ? 1 : ((b.comparator < a.comparator) ? -1 : 0));
-            res.render("Index/landing", { Videos: allVideos, State: "The United States" });
+            res.render("Index/landing", { Videos: allVideos, showingLatest: false });
         }
     });
 });
@@ -156,39 +156,15 @@ router.get("/uploadVideo", middleware.isLoggedIn, (req, res) => {
 
 //@ GET LATEST APPROOVED VIDEOS
 router.get("/latest", (req, res) => {
-    Videos.find({ModerationStatus: true}, (err, allVideos) => {
+    Videos.find({ ModerationStatus: true }, (err, allVideos) => {
         if (err) {
             console.log(error);
         } else {
             allVideos.sort((a, b) => (a.createdAt < b.createdAt) ? 1 : ((b.createdAt < a.createdAt) ? -1 : 0));
-            res.render("Index/latest", { Videos: allVideos, State: "The United State" });
+            res.render("Index/landing", { Videos: allVideos, showingLatest: true });
         }
     });
 
-});
-
-//@ SHOW VIDEOS BY STATE
-router.post("/viewState", (req, res) => {
-    //console.log(req.body);
-    Videos.find({ VideoLocation: req.body.State }, (err, foundVideos) => {
-        if (err) {
-            console.log(err);
-        } else {
-            res.render("Index/landing", { Videos: foundVideos, State: req.body.State });
-        }
-    });
-});
-
-//@ SHOW Latest Video in the given state
-router.post("/viewState/latest", (req, res) => {
-    Videos.find({ VideoLocation: req.body.State }, (err, foundVideos) => {
-        if (err) {
-            console.log(err);
-        } else {
-            foundVideos.sort((a, b) => (a.createdAt < b.createdAt) ? 1 : ((b.createdAt < a.createdAt) ? -1 : 0));
-            res.render("Index/latest", { Videos: foundVideos, State: req.body.State });
-        }
-    });
 });
 
 // @POST to upload the video and save path in database
@@ -201,11 +177,11 @@ router.post("/uploadVideo", middleware.isLoggedIn, (req, res) => {
                 if (err) {
                     console.log(err);
                 } else {
-                    var author = {
+                    let author = {
                         id: res.locals.currentUser._id,
                         Username: res.locals.currentUser.Username
                     }
-                    var videoDetails = req.body;
+                    let videoDetails = req.body;
                     videoDetails.VideoFilePath = req.file.path;
                     videoDetails.author = author;
                     videoDetails.ModerationStatus = false;
@@ -244,8 +220,8 @@ router.post("/report/:id", middleware.isLoggedIn, (req, res) => {
 });
 
 //@ Delete The Video, Users Array is also deleted
-router.delete("/video/:id", upload, async (req, res) => {
-    Videos.findById(req.params.id, async (err, foundVideo) => {
+router.delete("/video/:id", upload, async(req, res) => {
+    Videos.findById(req.params.id, async(err, foundVideo) => {
         if (err) {
             console.log(err);
         } else {
@@ -253,9 +229,6 @@ router.delete("/video/:id", upload, async (req, res) => {
                 if (err) {
                     console.log(err);
                 } else {
-                    //console.log("User who is author of the video")
-                    //console.log(foundUser);
-                    //const index=foundUser.Videos.findIndex(req.params.id);
                     foundUser.Videos.forEach((id, index) => {
                         if (id.equals(req.params.id)) {
                             console.log(index);

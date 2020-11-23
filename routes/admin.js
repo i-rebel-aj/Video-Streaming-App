@@ -2,9 +2,8 @@ const express = require("express");
 const router = express.Router();
 const Users = require("../models/user");
 const Videos = require("../models/video");
-const Moderators = require("../models/moderator");
 const Admin = require("../models/admin");
-const ContactMessages=require("../models/ContactMessages");
+const ContactMessages = require("../models/ContactMessages");
 const bcrypt = require("bcryptjs");
 const fetch = require('node-fetch');
 const { stringify } = require('querystring');
@@ -18,17 +17,11 @@ router.get("/dashboard", (req, res) => {
                 if (err) {
                     console.log(err);
                 } else {
-                    Moderators.find({}, (err, foundModerators) => {
+                    ContactMessages.find({}, (err, foundMessages) => {
                         if (err) {
                             console.log(err);
                         } else {
-                            ContactMessages.find({}, (err, foundMessages)=>{
-                                if(err){
-                                    console.log(err);
-                                }else{  
-                                    res.render("Admin/AdminPanel", { Users: foundUsers, Videos: foundVideos, Moderators: foundModerators, Messages: foundMessages});
-                                }
-                            });
+                            res.render("Admin/AdminPanel", { Users: foundUsers, Videos: foundVideos, Messages: foundMessages });
                         }
                     });
                 }
@@ -44,9 +37,9 @@ router.get("/login", (req, res) => {
 });
 
 //@ SHOW USER LOG OUT PAGE
-router.get("/logout", function (req, res) {
+router.get("/logout", function(req, res) {
     if (req.session) {
-        req.session.destroy(function (err) {
+        req.session.destroy(function(err) {
             if (err) {
                 return next(err);
             } else {
@@ -57,7 +50,7 @@ router.get("/logout", function (req, res) {
 });
 
 //@ POST Saving User In the Database
-router.post("/signup", async (req, res) => {
+router.post("/signup", async(req, res) => {
     //If Captcha wasn't filled
     if (!req.body['g-recaptcha-response']) {
         req.flash("error", "Please Select Captcha");
@@ -86,7 +79,7 @@ router.post("/signup", async (req, res) => {
             }
             let registered_admin = new Admin(admin);
             console.log(registered_admin);
-            registered_admin.save(function (err, doc) {
+            registered_admin.save(function(err, doc) {
                 if (err) {
                     req.flash("error", "Already Taken Email/Username");
                     res.redirect("/admin/signup");
@@ -98,8 +91,8 @@ router.post("/signup", async (req, res) => {
         }
     }
 });
-router.post("/contact", (req,res)=>{
-    Message=new ContactMessages(req.body);
+router.post("/contact", (req, res) => {
+    Message = new ContactMessages(req.body);
     Message.save();
     req.flash("success", "Message Sent To admins");
     res.redirect("/");

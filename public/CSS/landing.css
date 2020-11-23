@@ -1,17 +1,7 @@
-.Landing {
-    margin: 16px auto;
-    border: 1px solid white;
-    background-color: white;
+.card {
+    padding: 10px;
 }
 
-.primary {
-    margin-left: 10px;
-    max-width: 65%;
-    float: left;
-}
-
-.secondary {
-    margin-right: 10px;
-    max-width: 25%;
-    float: right;
+.videoSection {
+    display: grid;
 }
